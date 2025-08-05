@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_07_29_091313) do
+ActiveRecord::Schema[7.1].define(version: 2025_08_05_111449) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -50,6 +50,12 @@ ActiveRecord::Schema[7.1].define(version: 2025_07_29_091313) do
     t.datetime "decided_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "purpose"
+    t.integer "employment_status", default: 0
+    t.decimal "annual_income", precision: 12, scale: 2
+    t.decimal "monthly_expenses", precision: 10, scale: 2
+    t.decimal "existing_debts", precision: 12, scale: 2
+    t.index ["employment_status"], name: "index_loan_applications_on_employment_status"
     t.index ["user_id"], name: "index_loan_applications_on_user_id"
   end
 
