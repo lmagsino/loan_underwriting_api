@@ -56,6 +56,55 @@ class LoanApplication < ApplicationRecord
   def monthly_debt_service
     (existing_debts || 0) / 12
   end
+
+  # Status transition methods
+  def can_submit?
+    draft? && documents.exists? && valid?
+  end
+  
+  def can_update?
+    draft?
+  end
+  
+  def can_delete?
+    draft?
+  end
+  
+  def processing_time
+    return nil unless decided_at && applied_at
+    distance_of_time_in_words(applied_at, decided_at)
+  end
+  
+  # Status display helpers
+  def status_display
+    case status
+    when 'draft'
+      'Draft - Complete your application'
+    when 'submitted'
+      'Submitted - Under review'
+    when 'under_review'
+      'Under Review - Processing...'
+    when 'approved'
+      'Approved - Congratulations!'
+    when 'rejected'
+      'Declined - See details below'
+    when 'funded'
+      'Funded - Money transferred'
+    end
+  end
+  
+  def status_color
+    case status
+    when 'draft'
+      'gray'
+    when 'submitted', 'under_review'
+      'yellow'
+    when 'approved', 'funded'
+      'green'
+    when 'rejected'
+      'red'
+    end
+  end
   
   private
   
