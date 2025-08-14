@@ -7,8 +7,17 @@ Rails.application.routes.draw do
       post '/auth/login', to: 'auth#login'
       get '/auth/profile', to: 'auth#profile'
       
-      # Future routes
-      resources :loan_applications, only: [:index, :show, :create, :update]
+      # Loan Applications
+      resources :loan_applications do
+        member do
+          post :submit
+        end
+        
+        # Nested documents
+        resources :documents, only: [:index, :show, :create, :destroy]
+      end
+      
+      # Users
       resources :users, only: [:show, :update]
     end
   end
